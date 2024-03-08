@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const jwt = require("jsonwebtoken");
 const router = Router();
-const { User } = require("../db/index");
+const { User, Account } = require("../db/index");
 const { JWT_SECRET } = require("../config");
 const { authMiddleware } = require("../middleware/middleware");
 const { signupSchema, signInSchema, updateSchema } = require("../zod");
@@ -16,7 +16,7 @@ router.post("/signup", async (req, res) => {
   if (!success) return res.status(411).json({ msg: "Invalid Inputs" });
 
   const user = await User.findOne({ username: req.body.username });
-  console.log(user);
+
   if (user)
     return res
       .status(411)
@@ -32,6 +32,11 @@ router.post("/signup", async (req, res) => {
   });
 
   const createdUserId = userCreated._id;
+  await Account.create({
+    balance: 1 + Math.random() * 10000,
+    userId:createdUserId
+  });
+
   const token = jwt.sign({ createdUserId }, JWT_SECRET);
 
   res.json({ msg: "User Created Successfully", token: token });
@@ -85,7 +90,7 @@ router.get("/bulk", authMiddleware, async (req, res) => {
       },
     ],
   });
-  
+
   return res.json({
     user: users.map((user) => ({
       username: user.username,
