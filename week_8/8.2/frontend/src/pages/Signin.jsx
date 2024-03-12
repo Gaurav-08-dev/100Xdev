@@ -6,6 +6,10 @@ import InputBox from "../components/InputBox";
 import AuthStructure from "../components/AuthStructure";
 
 const Signin = () => {
+
+  const handleSignin = () => {
+
+  }
   return (
     <AuthStructure>
       <Heading label="Sign in" />
@@ -13,7 +17,7 @@ const Signin = () => {
       <InputBox label="Email" placeholder="Enter Email" />
       <InputBox label="Password" placeholder="Enter Password" />
       <div className="pt-4">
-        <Button label="Sign In" onClick={() => {}} />
+        <Button label="Sign In" onClick={() => handleSignin()} />
       </div>
       <BottomWarning
         label="Don't have an account?"

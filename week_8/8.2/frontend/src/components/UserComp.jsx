@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Button from "./Button";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const debounce = (func, delay = 1000) => {
   let timer;
@@ -17,7 +18,7 @@ const debounce = (func, delay = 1000) => {
 
 const User = () => {
   const [users, setUsers] = useState([]);
-  
+
   const fetchUsers = (filter) => {
     const token = localStorage.getItem("user-token");
     axios
@@ -33,8 +34,8 @@ const User = () => {
   const debouncedFetch = debounce(fetchUsers);
 
   const handleFilterChange = (e) => {
-    debouncedFetch(e.target.value)
-  }
+    debouncedFetch(e.target.value);
+  };
   return (
     <>
       <div className="font-bold mt-6 text-lg">Users</div>
@@ -43,7 +44,6 @@ const User = () => {
           type="text"
           placeholder="Search Users..."
           className="w-full px-2 border rounded border-slate-200"
-          
           onChange={(e) => handleFilterChange(e)}
         />
       </div>
@@ -57,6 +57,7 @@ const User = () => {
 };
 
 const UserComp = ({ user }) => {
+  const navigate = useNavigate();
   return (
     <div className="flex justify-between">
       <div className="flex">
@@ -70,7 +71,12 @@ const UserComp = ({ user }) => {
         </div>
       </div>
       <div className="flex flex-col justify-center h-full">
-        <Button label="Send Money" />
+        <Button
+          label="Send Money"
+          onClick={() => {
+            navigate("/send?id=" + user._id + "&name=" + user.firstName);
+          }}
+        />
       </div>
     </div>
   );

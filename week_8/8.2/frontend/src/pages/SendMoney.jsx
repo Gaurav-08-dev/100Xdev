@@ -1,4 +1,33 @@
+import axios from "axios";
+import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
+
 const SendMoney = () => {
+  const [params] = useSearchParams();
+  const [amount, setAmount] = useState();
+  const id = params.get("id");
+  const name = params.get("name");
+
+  const handleAmountTransfer = () => {
+    const token = localStorage.getItem("user-token");
+    axios
+      .post(
+        "http://localhost:3069/api/v1/account/transfer",
+        {
+          to: id,
+          amount: amount,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
+
   return (
     <div className="flex justify-center items-center bg-gray-100 h-screen">
       <div className="h-full flex flex-col justify-center">
@@ -10,9 +39,11 @@ const SendMoney = () => {
           <div className="p-6">
             <div className="flex items-center space-x-4">
               <div className="rounded-full w-12 h-12 bg-green-500 flex items-center justify-center">
-                <span className="text-2xl text-white">A</span>
+                <span className="text-2xl text-white">
+                  {name[0].toUpperCase()}
+                </span>
               </div>
-              <h3 className="text-2xl font-semibold">Receiver name</h3>
+              <h3 className="text-2xl font-semibold">{name}</h3>
             </div>
 
             <div className="space-y-4">
@@ -29,6 +60,7 @@ const SendMoney = () => {
                   type="number"
                   id="amount"
                   placeholder="Enter amount"
+                  onChange={(e) => setAmount(e.target.value)}
                 />
               </div>
               <button
@@ -36,6 +68,7 @@ const SendMoney = () => {
               transition-colors h-10 px-4 py-2 w-full
               bg-green-500 text-white
               "
+                onClick={() => handleAmountTransfer()}
               >
                 Initiate Transfer
               </button>

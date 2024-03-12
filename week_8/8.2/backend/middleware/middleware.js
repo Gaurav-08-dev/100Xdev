@@ -11,7 +11,6 @@ function authMiddleware(req, res, next) {
   try {
     const isVerified = jwt.verify(token, JWT_SECRET);
     req.userId = isVerified.createdUserId;
-    
     next();
   } catch (error) {
   
