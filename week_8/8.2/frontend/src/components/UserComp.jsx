@@ -4,25 +4,37 @@ import { useEffect, useState } from "react";
 import Button from "./Button";
 import axios from "axios";
 
+const debounce = (func, delay = 1000) => {
+  let timer;
+  return function (...args) {
+    clearTimeout(timer);
+
+    timer = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
+};
+
 const User = () => {
   const [users, setUsers] = useState([]);
-
-
-  const fetchUsers = () => {
-    const token = localStorage.getItem('user-token');
+  
+  const fetchUsers = (filter) => {
+    const token = localStorage.getItem("user-token");
     axios
-      .get("http://localhost:3069/api/v1/user/bulk", {
-        headers:{
-          authorization:`Bearer ${token}`
-        }
+      .get("http://localhost:3069/api/v1/user/bulk?filter=" + filter, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
       })
       .then((res) => setUsers(res.data.user))
-      .catch(err => console.log(err))
-      
+      .catch((err) => console.log(err));
   };
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+
+  const debouncedFetch = debounce(fetchUsers);
+
+  const handleFilterChange = (e) => {
+    debouncedFetch(e.target.value)
+  }
   return (
     <>
       <div className="font-bold mt-6 text-lg">Users</div>
@@ -31,6 +43,8 @@ const User = () => {
           type="text"
           placeholder="Search Users..."
           className="w-full px-2 border rounded border-slate-200"
+          
+          onChange={(e) => handleFilterChange(e)}
         />
       </div>
       <div>
