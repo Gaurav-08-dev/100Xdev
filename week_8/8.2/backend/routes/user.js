@@ -34,7 +34,7 @@ router.post("/signup", async (req, res) => {
   const createdUserId = userCreated._id;
   await Account.create({
     balance: 1 + Math.random() * 10000,
-    userId:createdUserId
+    userId: createdUserId,
   });
 
   const token = jwt.sign({ createdUserId }, JWT_SECRET);
@@ -73,7 +73,6 @@ router.put("/", authMiddleware, async (req, res) => {
 
 router.get("/bulk", authMiddleware, async (req, res) => {
   const params = req.query.filter || "";
-
   const users = await User.find({
     $or: [
       {
@@ -92,12 +91,14 @@ router.get("/bulk", authMiddleware, async (req, res) => {
   });
 
   return res.json({
-    user: users.map((user) => ({
-      username: user.username,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      _id: user._id,
-    })),
+    user: users
+      .filter((item) => item._id.toString() !== req.userId)
+      .map((user) => ({
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        _id: user._id.toString(),
+      })),
   });
 });
 
