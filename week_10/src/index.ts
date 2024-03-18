@@ -1,8 +1,8 @@
 import { Client } from "pg";
+import "dotenv/config";
 
 const client = new Client({
-  connectionString:
-    "postgresql://Gaurav-08-dev:ws1j2vZAtHCN@ep-raspy-bonus-a5ey23id.us-east-2.aws.neon.tech/week_10?sslmode=require",
+  connectionString: process.env.NEON_CONNECTION_STRING,
 });
 
 async function createUsersTable() {
@@ -52,10 +52,12 @@ async function getUser(email: string) {
     return null;
   } catch (error) {
     console.log("Error during insertion", error);
-    throw error
+    throw error;
   } finally {
     await client.end();
   }
 }
 
-// getUser("gaurav@gaurav.com")
+getUser("gaurav@gaurav.com")
+
+// * RELATIONSHIPS

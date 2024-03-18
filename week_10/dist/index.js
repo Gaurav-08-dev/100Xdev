@@ -10,8 +10,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const pg_1 = require("pg");
+require("dotenv/config");
 const client = new pg_1.Client({
-    connectionString: "postgresql://Gaurav-08-dev:ws1j2vZAtHCN@ep-raspy-bonus-a5ey23id.us-east-2.aws.neon.tech/week_10?sslmode=require",
+    connectionString: process.env.NEON_CONNECTION_STRING,
 });
 function createUsersTable() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -69,4 +70,5 @@ function getUser(email) {
         }
     });
 }
-// getUser("gaurav@gaurav.com")
+getUser("gaurav@gaurav.com");
+// * RELATIONSHIPS
