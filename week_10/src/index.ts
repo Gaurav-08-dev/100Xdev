@@ -58,6 +58,83 @@ async function getUser(email: string) {
   }
 }
 
-getUser("gaurav@gaurav.com")
+// getUser("gaurav@gaurav.com")
 
-// * RELATIONSHIPS
+// * RELATIONSHIPS & TRANSACTIONS
+
+async function createAddressTable() {
+  await client.connect();
+  const query = `CREATE TABLE addresses (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    country VARCHAR(100) NOT NULL,
+    street VARCHAR(255) NOT NULL,
+    pincode VARCHAR(20),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) on DELETE CASCADE
+  )`;
+  const result = await client.query(query);
+  console.log(result);
+}
+
+// createAddressTable()
+
+async function insertUserAndAddress(
+  username: string,
+  email: string,
+  password: string,
+  city: string,
+  country: string,
+  street: string,
+  pincode: string
+) {
+  try {
+    await client.connect();
+
+    await client.query("BEGIN"); // * START TRANSACTION
+
+    const insertUserText = `INSERT INTO users (username,email,password)
+    VALUES ($1, $2,$3)
+    RETURNING id
+    `;
+
+    const userRes = await client.query(insertUserText, [
+      username,
+      email,
+      password,
+    ]);
+    console.log("UserRes", userRes);
+
+    const userId = userRes.rows[0].id;
+
+    const insertAddressText = `
+    INSERT INTO addresses (user_id, city, country, street, pincode)
+    VALUES ($1, $2, $3, $4, $5)`;
+
+    await client.query(insertAddressText, [
+      userId,
+      city,
+      country,
+      street,
+      pincode,
+    ]);
+
+    await client.query("COMMIT");
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.log(error);
+  } finally {
+    await client.end();
+  }
+}
+
+// insertUserAndAddress(
+//   'satpal', 
+//   'satpal.dosa@jhotta.com', 
+//   'securepassword123', 
+//   'New Delhi', 
+//   'MARS', 
+//   'CENTURIA GALAXY', 
+//   '100069'
+// );
