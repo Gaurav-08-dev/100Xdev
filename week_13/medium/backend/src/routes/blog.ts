@@ -1,3 +1,4 @@
+import { createBlogInput, updateBlogInput } from "@dev_gaurav/medium-common";
 import { PrismaClient } from "@prisma/client";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { Hono } from "hono";
@@ -14,9 +15,6 @@ export const blogRouter = new Hono<{
 }>();
 
 blogRouter.use("/*", async (c, next) => {
-  // extract the user id
-
-  // pass the userinfo to route handlers
   const header = c.req.header("authorization") || "";
   const token = header.split(" ")[1];
   const response = await verify(token, c.env.JWT_SECRET);
@@ -51,6 +49,13 @@ blogRouter.get("/bulk", async (c) => {
 
 blogRouter.post("/", async (c) => {
   const body = await c.req.json();
+  const success = createBlogInput.safeParse(body);
+  if (!success) {
+    c.status(411);
+    return c.json({
+      message: "Inputs not correct",
+    });
+  }
   const blogId = c.get("userId");
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
@@ -71,6 +76,13 @@ blogRouter.post("/", async (c) => {
 
 blogRouter.put("/", async (c) => {
   const body = await c.req.json();
+  const success = updateBlogInput.safeParse(body);
+  if (!success) {
+    c.status(411);
+    return c.json({
+      message: "Inputs not correct",
+    });
+  }
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
@@ -87,7 +99,6 @@ blogRouter.put("/", async (c) => {
     id: blog.id,
   });
 });
-
 
 // Add pagination
 blogRouter.get("/:id", async (c) => {
