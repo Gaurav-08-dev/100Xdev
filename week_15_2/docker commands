@@ -1,3 +1,5 @@
+
+-------------------------WORKING WITH THE NETWORK---------------------------
 1. Build the image
     docker build -t image_tag .
 
@@ -12,3 +14,8 @@
 
 5. Check the logs to ensure the db connection is successful
     docker logs <container_id>
+
+
+
+---------------------------- DOCKER COMPOSE ------------------------------------------
+
