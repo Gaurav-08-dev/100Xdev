@@ -1,0 +1,14 @@
+1. Build the image
+    docker build -t image_tag .
+
+2. Create a network
+    docker network create my_custom_network
+
+3. Start mongo on the same network
+    docker run -d -v volume_database:/data/db --name mongo --network my_custom_network -p 27017:27017 mongo
+
+4. Start the backend process with the network attached to it
+    docker run -d -p 3000:3000 --name backend --network my_custom_network image_tag
+
+5. Check the logs to ensure the db connection is successful
+    docker logs <container_id>
