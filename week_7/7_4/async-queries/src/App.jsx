@@ -1,6 +1,6 @@
 
 import './App.css'
-import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { RecoilRoot, useRecoilState, useRecoilValue } from 'recoil'
 import { notifications, totalNotificationSelector } from './atoms'
 import { useEffect } from 'react'
 import axios from 'axios'
