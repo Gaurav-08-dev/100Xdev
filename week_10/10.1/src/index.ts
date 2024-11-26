@@ -7,7 +7,7 @@ const client = new Client({
 
 async function createUsersTable() {
   await client.connect();
-  const result = await client.query(`
+  const result = await client.query(` 
   CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
@@ -130,11 +130,36 @@ async function insertUserAndAddress(
 }
 
 // insertUserAndAddress(
-//   'satpal', 
-//   'satpal.dosa@jhotta.com', 
-//   'securepassword123', 
-//   'New Delhi', 
-//   'MARS', 
-//   'CENTURIA GALAXY', 
+//   'satpal',
+//   'satpal.dosa@jhotta.com',
+//   'securepassword123',
+//   'New Delhi',
+//   'MARS',
+//   'CENTURIA GALAXY',
 //   '100069'
 // );
+
+
+// * JOINS
+
+
+async function getUserAndAddress(userId: string){
+  try {
+    await client.connect();
+    const query = `SELECT u.id, u.username, u.email, a.city, a.country, a.street, a.pincode
+    FROM users us
+    JOIN addresses a ON u.id = a.user_id
+    WHERE u.id =  $1
+    `
+    const result = await client.query(query, [userId]);
+
+    console.log(result.rows)
+  } catch (error) {
+    throw error
+  }
+  finally{
+    await client.end()
+  }
+}
+
+// getUserAndAddress('9')

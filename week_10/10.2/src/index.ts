@@ -48,7 +48,7 @@ async function getUser(username: string) {
   console.log(res);
 }
 
-getUser("test@g.com")
+// getUser("test@g.com")
 
 async function deleteUser(username: string) {
   const res = await prisma.user.delete({
@@ -57,7 +57,53 @@ async function deleteUser(username: string) {
     },
   });
 
-  console.log(res)
+  console.log(res);
 }
 
 // deleteUser("gaurav@g.com")
+
+async function createTodo(
+  title: string, 
+  description: string,
+  userId: number, 
+) {
+  const todo = await prisma.todo.create({
+    data: {
+      title,
+      description,
+      userId
+    }
+  });
+  console.log(todo)
+}
+ 
+// createTodo("go to moon", "go to moon and die", 1)
+
+async function getTodo(userId:number){
+  const todo = await prisma.todo.findMany({
+    where:{
+      userId:userId
+    }
+  })
+
+  console.log(todo)
+}
+
+// getTodo(2)
+
+async function getUserDetailsandTodos(userId:number){
+
+  const details = await prisma.todo.findMany({
+    where:{userId:userId},
+    select:{
+      user:true,
+      title:true,
+      description:true
+    }
+  })
+
+  console.log(details)
+}
+
+
+getUserDetailsandTodos(2)

@@ -44,7 +44,7 @@ function getUser(username) {
         console.log(res);
     });
 }
-getUser("test@g.com");
+// getUser("test@g.com")
 function deleteUser(username) {
     return __awaiter(this, void 0, void 0, function* () {
         const res = yield prisma.user.delete({
@@ -56,3 +56,41 @@ function deleteUser(username) {
     });
 }
 // deleteUser("gaurav@g.com")
+function createTodo(title, description, userId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const todo = yield prisma.todo.create({
+            data: {
+                title,
+                description,
+                userId
+            }
+        });
+        console.log(todo);
+    });
+}
+// createTodo("go to moon", "go to moon and die", 1)
+function getTodo(userId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const todo = yield prisma.todo.findMany({
+            where: {
+                userId: userId
+            }
+        });
+        console.log(todo);
+    });
+}
+// getTodo(2)
+function getUserDetailsandTodos(userId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const details = yield prisma.todo.findMany({
+            where: { userId: userId },
+            select: {
+                user: true,
+                title: true,
+                description: true
+            }
+        });
+        console.log(details);
+    });
+}
+getUserDetailsandTodos(2);

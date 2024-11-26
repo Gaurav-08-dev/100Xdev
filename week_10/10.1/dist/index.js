@@ -17,7 +17,7 @@ const client = new pg_1.Client({
 function createUsersTable() {
     return __awaiter(this, void 0, void 0, function* () {
         yield client.connect();
-        const result = yield client.query(`
+        const result = yield client.query(` 
   CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
@@ -128,11 +128,33 @@ function insertUserAndAddress(username, email, password, city, country, street, 
     });
 }
 // insertUserAndAddress(
-//   'satpal', 
-//   'satpal.dosa@jhotta.com', 
-//   'securepassword123', 
-//   'New Delhi', 
-//   'MARS', 
-//   'CENTURIA GALAXY', 
+//   'satpal',
+//   'satpal.dosa@jhotta.com',
+//   'securepassword123',
+//   'New Delhi',
+//   'MARS',
+//   'CENTURIA GALAXY',
 //   '100069'
 // );
+// * JOINS
+function getUserAndAddress(userId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield client.connect();
+            const query = `SELECT u.id, u.username, u.email, a.city, a.country, a.street, a.pincode
+    FROM users u
+    JOIN addresses a ON u.id = a.user_id
+    WHERE u.id =  $1
+    `;
+            const result = yield client.query(query, [userId]);
+            console.log(result.rows);
+        }
+        catch (error) {
+            throw error;
+        }
+        finally {
+            yield client.end();
+        }
+    });
+}
+getUserAndAddress('9');

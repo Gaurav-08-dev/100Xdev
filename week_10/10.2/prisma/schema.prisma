@@ -19,13 +19,14 @@ model User {
   password  String
   firstName String?
   lastName  String
+  todos Todo[]
 }
 
 model Todo {
   id Int @id @default(autoincrement())
   title String
   description String
-  done String
+  done String?
   userId Int
-
+  user User @relation(fields: [userId], references: [id])
 }
