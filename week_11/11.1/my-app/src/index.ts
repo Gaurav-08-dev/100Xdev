@@ -2,9 +2,11 @@ export interface Env {}
 
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+
+		// How to do routing
 		if (request.method === 'GET') {
 			return Response.json({
-				message: 'Get Request',
+				message: 'So I came back to practice',
 			});
 		} else {
 			return Response.json({
