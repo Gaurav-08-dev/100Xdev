@@ -1,17 +1,12 @@
-import { userRouter } from "./routes/user";
-import { blogRouter } from "./routes/blog";
 import { Hono } from "hono";
-import { cors } from "hono/cors";
+import auth from "./authRoutes";
+import blog from "./blogroutes";
+const app = new Hono();
 
-const app = new Hono<{
-  Bindings: {
-    DATABASE_URL: string;
-    JWT_SECRET: string;
-  };
-}>();
-
-app.use("/*", cors());
-app.route("/api/v1/user", userRouter);
-app.route("/app/v1/blog", blogRouter);
+app.get("/", (c) => {
+  return c.text("Hello Hono!");
+});
+app.route("/api/v1", auth);
+app.route("/api/v1", blog);
 
 export default app;
