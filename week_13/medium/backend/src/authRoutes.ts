@@ -23,9 +23,10 @@ auth.post("/user/signup", async (c) => {
       },
     });
 
-    const jwt = sign({ id: user.id }, c.env.JWT_SECRET);
-    return c.json({ jwt });
+    const jwt = await sign({ id: user.id }, c.env.JWT_SECRET);
+    return c.text(jwt)
   } catch (error) {
+    console.log(error)
     c.status(403);
     return c.json({ error: "Error while signing up" });
   }
@@ -36,7 +37,7 @@ auth.post("/user/signin", async (c) => {
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
 
-  const body = await c.req.json()
+  const body = await c.req.json();
   const user = await prisma.user.findUnique({
     where:{
       email:body.email,
