@@ -11,6 +11,7 @@ function EventCountRenderer() {
   const isEven = useRecoilValue(evenSelector);
   return <div>{isEven ? "even" : "odd"}</div>;
 }
+
 function CountRenderer() {
   const count = useRecoilValue(countAtom);
   return (
@@ -20,6 +21,7 @@ function CountRenderer() {
     </div>
   );
 }
+
 function Buttons() {
   const setCount = useSetRecoilState(countAtom);
   // const [count, setCount] = useRecoilState(countAtom);
