@@ -2,6 +2,10 @@ import { Hono } from "hono";
 import { PrismaClient } from "../generated/prisma/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { verify } from "hono/jwt";
+import {
+  createBlogInput,
+  updateBlogInput,
+} from "@dev_gaurav/middleware-medium";
 
 const blog = new Hono<{
   Bindings: {
@@ -32,6 +36,11 @@ blog.use("/*", async (c, next) => {
 
 blog.post("/", async (c) => {
   const body = await c.req.json();
+  const { success } = createBlogInput.safeParse(body);
+  if (!success) {
+    c.status(403);
+    return c.json({ error: "Invalid Input" });
+  }
   const authorId = c.get("userId");
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
@@ -52,6 +61,11 @@ blog.post("/", async (c) => {
 
 blog.put("/", async (c) => {
   const body = await c.req.json();
+  const { success } = updateBlogInput.safeParse(body);
+  if (!success) {
+    c.status(403);
+    return c.json({ error: "Invalid Input" });
+  }
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
@@ -77,7 +91,7 @@ blog.get("/bulk", async (c) => {
   }).$extends(withAccelerate());
 
   const blog = await prisma.post.findMany();
-  console.log("-----", blog)
+  console.log("-----", blog);
   return c.json({ blog });
 });
 
@@ -102,7 +116,5 @@ blog.get("/:id", async (c) => {
     return c.json({ message: "Blog not found!" });
   }
 });
-
-
 
 export default blog;
