@@ -9,11 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@repo/db": "*",
+    "@repo/store": "*",
     "next": "15.3.1",
+    "next-auth": "^4.24.11",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "@repo/db":"*",
-    "@repo/store":"*"
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

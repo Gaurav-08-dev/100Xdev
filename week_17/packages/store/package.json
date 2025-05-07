@@ -13,6 +13,6 @@
     "recoil": "^0.7.7"
   },
   "export":{
-    "./userBalance":"./src/hooks/userBalance"
+    "./*":"./src/hooks/useBalance.ts"
   }
 }
