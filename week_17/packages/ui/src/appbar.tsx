@@ -10,7 +10,6 @@ interface AppbarProps {
 }
 
 const Appbar = ({ user, onSignIn, onSignOut }: AppbarProps) => {
-  console.log(user)
   return (
     <div className="flex justify-between border-b px-4 py-2 items-center ">
       <div className="text-lg">Paytm</div>
