@@ -128,6 +128,23 @@ exports.Prisma.UserScalarFieldEnum = {
   password: 'password'
 };
 
+exports.Prisma.BalanceScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  amount: 'amount',
+  locked: 'locked'
+};
+
+exports.Prisma.OnRampTransactionScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  token: 'token',
+  provider: 'provider',
+  amount: 'amount',
+  startTime: 'startTime',
+  userId: 'userId'
+};
+
 exports.Prisma.MerchantScalarFieldEnum = {
   id: 'id',
   email: 'email',
@@ -149,6 +166,12 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.OnRampStatus = exports.$Enums.OnRampStatus = {
+  Success: 'Success',
+  Failure: 'Failure',
+  Processing: 'Processing'
+};
+
 exports.AuthType = exports.$Enums.AuthType = {
   Google: 'Google',
   Github: 'Github'
@@ -156,6 +179,8 @@ exports.AuthType = exports.$Enums.AuthType = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  Balance: 'Balance',
+  OnRampTransaction: 'OnRampTransaction',
   Merchant: 'Merchant'
 };
 
