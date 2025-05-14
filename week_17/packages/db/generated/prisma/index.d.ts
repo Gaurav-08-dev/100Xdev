@@ -5890,7 +5890,6 @@ export namespace Prisma {
   export type OnRampTransactionWhereUniqueInput = Prisma.AtLeast<{
     id?: number
     token?: string
-    userId?: number
     AND?: OnRampTransactionWhereInput | OnRampTransactionWhereInput[]
     OR?: OnRampTransactionWhereInput[]
     NOT?: OnRampTransactionWhereInput | OnRampTransactionWhereInput[]
@@ -5898,8 +5897,9 @@ export namespace Prisma {
     provider?: StringFilter<"OnRampTransaction"> | string
     amount?: IntFilter<"OnRampTransaction"> | number
     startTime?: DateTimeFilter<"OnRampTransaction"> | Date | string
+    userId?: IntFilter<"OnRampTransaction"> | number
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id" | "token" | "userId">
+  }, "id" | "token">
 
   export type OnRampTransactionOrderByWithAggregationInput = {
     id?: SortOrder

@@ -37,7 +37,18 @@ async function main() {
       },
     },
   });
-  console.log({ alice, bob });
+
+  await prisma.balance.upsert({
+    where: { userId: 1 },
+    create: {
+      userId: 1,
+      amount: 20000,
+      locked: 0
+    },
+    update: {
+      amount:20000
+    }
+  })
 }
 main()
   .then(async () => {

@@ -1,5 +1,5 @@
 import React from "react";
-import { SidebarItem } from "../api/component/sidebar";
+import { SidebarItem } from "../component/sidebar";
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex">
